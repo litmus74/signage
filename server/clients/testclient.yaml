@@ -27,7 +27,6 @@ slides:
     right:
       type: image
       source: "static/phyco.png"
-<<<<<<< HEAD
 
   - id: 2
     title: "Information Slide"
@@ -64,5 +63,3 @@ slides:
       source: "Enjoy the video presentation!"
       font: "Arial"
       color: "#FFFFFF"
-=======
->>>>>>> c8dc5c619d65d386426bd0cefaaaa1e078b95f20
