@@ -1,63 +1,65 @@
-from flask import Flask, jsonify, request, send_from_directory
-from datetime import datetime
-import yaml
-import os
+display_name: "Test Display"
+logo: "static/logo.png"
+motd:
+  text: "Welcome, Test Client!"
+  font: "Arial"
+  size: 24
+  color: "#FFAA00"
+  speed: 3
+  height_percent: 90
+  horizontal_from_percent: 5
+  horizontal_to_percent: 95
+slides:
+  - id: 1
+    title: "Welcome Slide"
+    title_area: left
+    title_style:
+      font: "Arial"
+      size: 48
+      color: "#FFAA00"
+      alignment: "center"
+    duration: 10
+    left:
+      type: text
+      source: "Hello Test Client!"
+      font: "Arial"
+      color: "#FFAA00"
+    right:
+      type: image
+      source: "static/phyco.png"
 
-app = Flask(__name__)
+  - id: 2
+    title: "Information Slide"
+    title_area: right
+    title_style:
+      font: "Arial"
+      size: 40
+      color: "#00AAFF"
+      alignment: "right"
+    duration: 10
+    left:
+      type: image
+      source: "static/logo.png"
+    right:
+      type: text
+      source: "This is the second slide with more information."
+      font: "Arial"
+      color: "#FFFFFF"
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CLIENTS_DIR = os.path.join(BASE_DIR, "clients")
-STATIC_DIR = os.path.join(BASE_DIR, "static")
-
-os.makedirs(CLIENTS_DIR, exist_ok=True)
-os.makedirs(STATIC_DIR, exist_ok=True)
-
-@app.route("/static/<path:filename>")
-def serve_static(filename):
-    return send_from_directory(STATIC_DIR, filename)
-
-def log_event(message):
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"[{now}] {message}")
-
-def load_client_slides(display_id):
-    filepath = os.path.join(CLIENTS_DIR, f"{display_id}.yaml")
-    if not os.path.exists(filepath):
-        log_event(f"⚠️ YAML file not found for display_id '{display_id}'")
-        return None
-    with open(filepath, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-    slides = data.get("slides", [])
-    return {"slides": slides, "logo": data.get("logo",""), "motd": data.get("motd","")}
-
-@app.route("/config/<display_id>")
-def get_config(display_id):
-    log_event(f"Received request from {display_id}")
-    data = load_client_slides(display_id)
-    if not data:
-        return jsonify({"error": "Display ID not found"}), 404
-
-    # Add current timestamp overlay to each slide
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    host_url = f"http://{request.host}"
-    for slide in data["slides"]:
-        slide.setdefault("overlays", []).append({"text": now, "x": 1600, "y": 50})
-
-        # Normalize URLs
-        for key in ["background", "media"]:
-            if key in slide:
-                if isinstance(slide[key], dict) and "file" in slide[key]:
-                    if not slide[key]["file"].startswith("http"):
-                        slide[key]["file"] = f"{host_url}/{slide[key]['file']}"
-                elif isinstance(slide[key], str) and not slide[key].startswith("http"):
-                    slide[key] = f"{host_url}/{slide[key]}"
-
-    # Normalize logo path
-    if "logo" in data and data["logo"] and not data["logo"].startswith("http"):
-        data["logo"] = f"{host_url}/{data['logo']}"
-
-    return jsonify(data)
-
-if __name__ == "__main__":
-    log_event("Server starting on 0.0.0.0:5000")
-    app.run(host="0.0.0.0", port=5000, debug=True)
+  - id: 3
+    title: "Video Slide"
+    title_area: left
+    title_style:
+      font: "Arial"
+      size: 40
+      color: "#FF0000"
+      alignment: "left"
+    duration: 15
+    left:
+      type: video
+      source: "static/sample_video.mp4"
+    right:
+      type: text
+      source: "Enjoy the video presentation!"
+      font: "Arial"
+      color: "#FFFFFF"
