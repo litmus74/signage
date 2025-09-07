@@ -1,6 +1,6 @@
 display_name: "Test Display"
 logo: "static/logo.png"
-background_image: "static/meida/dark.jpg"
+background_image: "static/media/dark.jpg"
 
 motd:
   text: "Welcome, Test Client!"
