@@ -11,7 +11,7 @@ from PyQt6.QtGui import QFont, QPixmap, QPalette, QColor
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtMultimediaWidgets import QVideoWidget
 
-SERVER_URL = "http://localhost:5000"
+SERVER_URL = "http://192.168.0.25:5000"
 CLIENT_ID = "testclient"
 CACHE_DIR = Path(__file__).parent / "cache"
 MEDIA_DIR = CACHE_DIR / "media"
@@ -106,51 +106,7 @@ class MainWindow(QWidget):
 
         # ----------------- Background -----------------
         bg_color = settings.get("background_color", "#000000")
-        palette = self.palette()
-        palette.setColor(QPalette.ColorRole.Window, QColor(bg_color))
-        self.setAutoFillBackground(True)
-        self.setPalette(palette)
-
-        bg_img_path = settings.get("background_image")
-        if bg_img_path:
-            bg_img_path = Path(bg_img_path)
-            if bg_img_path.exists():
-                bg_pixmap = QPixmap(str(bg_img_path))
-                self.bg_label = QLabel(self)
-                self.bg_label.setPixmap(bg_pixmap.scaled(self.win_w, self.win_h, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation))
-                self.bg_label.setGeometry(0, 0, self.win_w, self.win_h)
-                self.bg_label.lower()
-                self.bg_label.show()
-
-        # ----------------- Logo or Logo Text -----------------
-        logo_path = settings.get("logo")
-        logo_text_conf = settings.get("logo_text")
-        self.logo_label = None
-
-        if logo_path:
-            logo_path = Path(logo_path)
-            if logo_path.exists():
-                self.logo_label = QLabel(self)
-                pixmap = QPixmap(str(logo_path)).scaledToHeight(int(self.win_h * 0.11))
-                self.logo_label.setPixmap(pixmap)
-                self.logo_label.move(int(0.02 * self.win_w), int(0.02 * self.win_h))
-                self.logo_label.show()
-        elif logo_text_conf:
-            text = logo_text_conf.get("text", "")
-            font = logo_text_conf.get("font", "Arial")
-            size = logo_text_conf.get("size", 48)
-            color = logo_text_conf.get("color", "#FFFFFF")
-            top_pct = logo_text_conf.get("top_percent", 3)
-            left_pct = logo_text_conf.get("left_percent", 2)
-            self.logo_label = QLabel(text, self)
-            self.logo_label.setFont(QFont(font, size))
-            self.logo_label.setStyleSheet(f"color: {color}; background: transparent;")
-            self.logo_label.adjustSize()
-            self.logo_label.move(int(left_pct * self.win_w / 100), int(top_pct * self.win_h / 100))
-            self.logo_label.show()
-
-        # ----------------- Clock (optional) -----------------
-        clock_conf = settings.get("clock", {})
+        clock_conf = settings.get("clock") or {}
         clock_enabled = clock_conf.get("enabled", True)  # Default: show clock
 
         if clock_enabled:
