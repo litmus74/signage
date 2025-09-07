@@ -1,0 +1,73 @@
+slides:
+
+
+  - id: 2
+    duration: 10   # display for 10 seconds
+    
+    title: "Intro Slide"
+    title_area: left
+    title_style:
+      font: "Arial"
+      size: 48
+      color: "#FFAA00"
+      alignment: "center"   # options: left, center, right
+    
+    left:
+      type: text
+      source: |
+        Second slide: Cras vel sem at enim sodales placerat.
+        Nam pretium turpis non lectus tincidunt.
+      font: "Arial"
+      color: "#FFAA00"
+    
+    right:
+      type: image
+      source: "media/phyco.png"
+
+  - id: 3
+    duration: 10   # display for 10 seconds
+    
+    title: "Test Slide"
+    title_area: right
+    title_style:
+      font: "Arial"
+      size: 48
+      color: "#FFAA00"
+      alignment: "center"   # options: left, center, right
+ 
+    
+    left:
+      type: image
+      source: "media/qr2.png"
+
+    right:
+      type: text
+      source: |
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Proin sed libero nec sapien pretium commodo.
+      font: "Arial"
+      color: "#FFFFFF"
+
+
+  - id: 1
+    duration: 10   # display for 10 seconds
+    
+    title: "Summary Slide"
+    title_area: left
+    title_style:
+      font: "Arial"
+      size: 48
+      color: "#FFAA00"
+      alignment: "center"   # options: left, center, right
+
+    left:
+      type: text
+      source: |
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Proin sed libero nec sapien pretium commodo.
+      font: "Arial"
+      color: "#FFFFFF"
+    
+    right:
+      type: video
+      source: "media/serotonin.mp4"

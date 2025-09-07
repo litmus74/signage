@@ -1,0 +1,68 @@
+logo: http://127.0.0.1:5000/static/images/logo.png
+motd: 'Welcome to the Sandbox! Keep this as a single line MOTD scrollto make scrolling
+  better.
+
+  '
+slides:
+- background: http://127.0.0.1:5000/static/images/dark.jpg
+  duration_ms: 1000
+  media:
+    file: http://127.0.0.1:5000/static/images/dark.jpg
+    side: right
+  overlays:
+  - color: 22ffbbS
+    fontsize: 18
+    text: Slide 1 Overlay
+    x: 100
+    y: 150
+  - text: '2025-08-31 18:38:47'
+    x: 1600
+    y: 50
+  ticker:
+    color: bbff22
+    end_perc: 0.7
+    fontsize: 16
+    side: left
+    speed: 1
+    start_perc: 0.15
+    text: 'Current time: 2025-08-31 18:38:47'
+    width_perc:
+    - 0.05
+    - 0.45
+  title:
+  - color: bbff22
+    fontsize: 40
+    text: First Slide
+    x: 50
+    y: 100
+- background: http://127.0.0.1:5000/static/images/dark.jpg
+  duration_ms: 5000
+  media:
+    file: http://127.0.0.1:5000/static/images/hexagon.jpg
+    side: left
+  overlays:
+  - color: cyan
+    fontsize: 18
+    text: Slide 2 Overlay
+    x: 100
+    y: 150
+  - text: '2025-08-31 18:38:47'
+    x: 1600
+    y: 50
+  ticker:
+    color: cyan
+    end_perc: 0.7
+    fontsize: 16
+    side: right
+    speed: 1
+    start_perc: 0.15
+    text: 'Current time: 2025-08-31 18:38:47'
+    width_perc:
+    - 0.05
+    - 0.45
+  title:
+  - color: red
+    fontsize: 20
+    text: ''
+    x: 50
+    y: 100

@@ -1,0 +1,26 @@
+# Display identification
+name: "Display_01"   # or id of the current signage client
+
+# Background settings
+background_image: "media/dark.jpg"  # path relative to YAML
+background_color: "#000000"  # fallback color if image not found
+
+# Logo settings
+logo: "media/logo.png"  # path relative to YAML
+logo_top_percent: 3             # top margin as % of window height
+logo_height_percent: 7         # logo height as % of window height
+
+# Clock settings (right-hand side)
+clock:
+  vertical_from_percent: 3   # top of clock area
+  vertical_to_percent: 7     # bottom of clock area
+  horizontal_from_percent: 80 # left edge as % of window width
+  horizontal_to_percent: 95   # right edge as % of window width
+  font: "Arial"
+  color: "#FFFF00"
+
+# Burn-in protection (to blank the screen periodically for a few milliseconds))
+burnin:
+  mode: "blank"       # "blank" or "shift"
+  interval_sec: 300  # every 5 minutes
+  duration_ms: 200    # for blank mode

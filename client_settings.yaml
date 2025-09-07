@@ -1,0 +1,63 @@
+# Display identification
+display_name: "Test_display"   # or id of the current signage client
+
+# Background settings
+background_image: "media/dark.jpg"  # path relative to YAML
+background_color: "#000000"  # fallback color if image not found
+
+# Logo settings
+logo:                          # path relative to YAML
+logo_top_percent: 3             # top margin as % of window height
+logo_height_percent: 7         # logo height as % of window height
+logo_text:
+  text: "Welcome to I04!"
+  font: "Arial"
+  size: 80
+  color: "#feda1a"
+  top_percent: 3
+  left_percent: 2
+
+
+# Clock settings (right-hand side)
+clock:
+  enabled: false  # true or false
+  font: "Arial"
+  color: "#FFFF00"
+  vertical_from_percent: 3   # top of clock area
+  vertical_to_percent: 7     # bottom of clock area
+  horizontal_from_percent: 80 # left edge as % of window width
+  horizontal_to_percent: 95   # right edge as % of window width
+  font: "Arial"
+  color: "#FFFF00"
+
+# Burn-in protection (to blank the screen periodically for a few milliseconds))
+burnin:
+  mode: "blank"       # "blank" or "shift"
+  interval_sec: 300  # every 5 minutes
+  duration_ms: 200    # for blank mode
+
+
+# client_settings.yaml
+
+window:
+  title: "Signage"
+  width: 1920
+  height: 1080
+
+display:
+  background_color: "#000000"
+  background_image: null
+  logo: null
+
+  clock:
+    font: "Arial"
+    color: "#FFFFFF"
+    from_h: 2
+    to_h: 13
+    from_w: 80
+    to_w: 98
+
+  burnin:
+    mode: "blank"        # or "shift"
+    duration_ms: 200
+    interval_sec: 300

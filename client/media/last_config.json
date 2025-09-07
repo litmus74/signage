@@ -1,0 +1,1 @@
+{"background": "http://127.0.0.1:5000/static/images/sample.jpg", "overlays": [{"text": "Slide BLAH 1", "x": 100, "y": 100}, {"text": "2025-08-31 11:02:35", "x": 1600, "y": 50}], "ticker": {"speed": 2, "text": "Current time: 2025-08-31 11:02:35"}}

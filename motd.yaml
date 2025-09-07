@@ -1,0 +1,9 @@
+text: "I04 is a versatile microfocus macromolecular crystallography beamline. The beam is fully tuneable in the energy range 6-20 keV and can be focused down to 10 × 5 µm². This beamline is equipped with an Eiger2 XE 16M detector, which enables fast and reliable data collection. The recent introduction of dose-driven data collection capabilities prevents the risk of radiation damage on the samples. Data collection can be performed onsite, remotely (through NoMachine), and in a fully automated mode (UDC)"
+font: "Arial"
+size: 50
+color: "#eeaa22"
+
+# Ticker layout
+height_percent: 90            # height in % at which scroller is placed
+horizontal_from_percent: 5   # left limit of ticker area
+horizontal_to_percent: 80     # right limit of ticker area

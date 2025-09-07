@@ -1,0 +1,78 @@
+logo: http://127.0.0.1:5000/static/images/logo.png
+motd: 'Welcome to the Sandbox! Keep this as a single line MOTD scrollto make scrolling
+  better.
+
+  '
+slides:
+- background: http://127.0.0.1:5000/static/images/dark.jpg
+  duration_ms: 10000
+  media:
+    file: http://127.0.0.1:5000/static/images/sample.jpg
+    side: right
+  overlays:
+  - color: 22ffbbS
+    fontsize: 40
+    text: Slide 1 Overlay
+    x: 100
+    y: 150
+  - text: '2025-09-01 00:43:59'
+    x: 1600
+    y: 50
+  ticker:
+    color: bbff22
+    end_perc: 0.7
+    fontsize: 40
+    side: left
+    speed: 1
+    start_perc: 0.15
+    text: Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+      doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore
+      veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
+      voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
+      magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam
+      est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed
+      quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam
+      quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam
+      corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis
+      autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae
+      consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur
+    width_perc:
+    - 0.05
+    - 0.45
+  title:
+  - color: bbff22
+    fontsize: 40
+    text: First Slide
+    x: 50
+    y: 100
+- background: http://127.0.0.1:5000/static/images/dark.jpg
+  duration_ms: 30000
+  media:
+    file: http://127.0.0.1:5000/static/images/hexagon.jpg
+    side: left
+  overlays:
+  - color: cyan
+    fontsize: 40
+    text: Slide 2 Overlay
+    x: 100
+    y: 150
+  - text: '2025-09-01 00:43:59'
+    x: 1600
+    y: 50
+  ticker:
+    color: yellow
+    end_perc: 0.7
+    fontsize: 40
+    side: right
+    speed: 1
+    start_perc: 0.15
+    text: 'Breaking news: PyQt6 sandbox demo'
+    width_perc:
+    - 0.05
+    - 0.45
+  title:
+  - color: red
+    fontsize: 40
+    text: ''
+    x: 50
+    y: 100
