@@ -1,16 +1,18 @@
 display_name: "Test Display"
 logo: "static/logo.png"
+hide_logo: true
 background_image: "static/media/dark.jpg"
 
 motd:
   text: "Welcome, Test Client!"
   font: "Arial"
-  size: 24
+  size: 50
   color: "#FFAA00"
   speed: 3
   height_percent: 90
   horizontal_from_percent: 5
-  horizontal_to_percent: 95
+  horizontal_to_percent: 85
+
 slides:
   - id: 1
     title: "Welcome Slide"
