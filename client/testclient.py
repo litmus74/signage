@@ -2,7 +2,6 @@ import sys
 import yaml
 import json
 import hashlib
-import random
 from pathlib import Path
 import requests
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel
@@ -95,20 +94,20 @@ def ensure_media_files(config):
     return config
 
 class MainWindow(QWidget):
-    def __init__(self, slides_config, settings, motd_config, top_label_config=None):
+    def __init__(self, slides_config, settings, motd_config):
         super().__init__()
-        self.setWindowTitle(settings.get("display_name","Display"))
-        self.resize(1920,1080)
-        self.win_w, self.win_h = 1920,1080
+        self.setWindowTitle(settings.get("display_name", "Display"))
+        self.resize(1920, 1080)
+        self.win_w, self.win_h = 1920, 1080
 
         # Background
         bg_path = settings.get("background_image")
         if bg_path and Path(bg_path).exists():
-            pix = QPixmap(bg_path).scaled(self.win_w,self.win_h,Qt.AspectRatioMode.KeepAspectRatioByExpanding)
+            pix = QPixmap(bg_path).scaled(self.win_w, self.win_h, Qt.AspectRatioMode.KeepAspectRatioByExpanding)
             self.bg_label = QLabel(self)
             self.bg_label.setPixmap(pix)
-            self.bg_label.setGeometry(0,0,self.win_w,self.win_h)
-            self.bg_label.lower()
+            self.bg_label.setGeometry(0, 0, self.win_w, self.win_h)
+            self.bg_label.lower()  # ensure background
 
         # Logo
         hide_logo = settings.get("hide_logo", False)
@@ -117,48 +116,67 @@ class MainWindow(QWidget):
             pix = QPixmap(logo_path)
             self.logo_label = QLabel(self)
             self.logo_label.setPixmap(pix)
-            self.logo_label.setGeometry(10,10,pix.width(),pix.height())
+            self.logo_label.setGeometry(10, 10, pix.width(), pix.height())
             self.logo_label.show()
         else:
             self.logo_label = None
 
-        # --- TOP LABEL ---
+        # Top label
+        top_label_conf = settings.get("top_label", {})
         self.top_label = None
-        if top_label_config:
-            tl = top_label_config
-            self.top_label = QLabel(tl.get("text",""), self)
-            font_name = tl.get("font","Arial")
-            font_size = tl.get("size",60)
-            color = tl.get("color","#FFFFFF")
-            self.top_label.setFont(QFont(font_name,font_size))
-            self.top_label.setStyleSheet(f"color:{color}; background: transparent;")
-            from_pct = tl.get("horizontal_from_percent",5)/100
-            to_pct = tl.get("horizontal_to_percent",30)/100
-            x = int(self.win_w*from_pct)
-            w = int(self.win_w*(to_pct-from_pct))
-            self.top_label.setGeometry(x, 10, w, font_size+10)
-            alignment = tl.get("alignment","left").lower()
-            align_flag = Qt.AlignmentFlag.AlignLeft
-            if alignment=="center": align_flag = Qt.AlignmentFlag.AlignCenter
-            if alignment=="right": align_flag = Qt.AlignmentFlag.AlignRight
-            self.top_label.setAlignment(align_flag)
-            self.top_label.show()
+        if top_label_conf.get("text"):
+            lbl = QLabel(top_label_conf.get("text"), self)
+            lbl.setFont(QFont(top_label_conf.get("font","Arial"), top_label_conf.get("size",60)))
+            lbl.setStyleSheet(f"color:{top_label_conf.get('color','#FFFFFF')}; background: transparent;")
+            from_pct = top_label_conf.get("horizontal_from_percent",0)/100
+            to_pct = top_label_conf.get("horizontal_to_percent",100)/100
+            x = int(self.win_w * from_pct)
+            w = int(self.win_w * (to_pct-from_pct))
+            lbl.setGeometry(x, 10, w, lbl.fontMetrics().height())
+            align_str = top_label_conf.get("alignment","left").lower()
+            if align_str=="center":
+                lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+            elif align_str=="right":
+                lbl.setAlignment(Qt.AlignmentFlag.AlignRight)
+            else:
+                lbl.setAlignment(Qt.AlignmentFlag.AlignLeft)
+            lbl.show()
+            self.top_label = lbl
 
-        # MOTD horizontal scroller
+       # MOTD horizontal scroller
         self.ticker_container = QWidget(self)
         self.ticker_container.setStyleSheet("background: transparent;")
         self.ticker_label = QLabel(motd_config.get("text", ""), self.ticker_container)
         self.ticker_label.setFont(QFont(motd_config.get("font","Arial"), motd_config.get("size",50)))
         self.ticker_label.setStyleSheet(f"color:{motd_config.get('color','#FFFFFF')}; background: transparent;")
-        self.ticker_label.adjustSize()
-        self.ticker_speed = motd_config.get("speed",3)
-        self.ticker_width = self.win_w
-        self.ticker_x = self.win_w
+        self.ticker_label.setWordWrap(False)
+
+        # calculate container geometry from percent
+        from_pct = motd_config.get("horizontal_from_percent",0)/100
+        to_pct = motd_config.get("horizontal_to_percent",100)/100
+        x = int(self.win_w * from_pct)
+        w = int(self.win_w * (to_pct-from_pct))
         ticker_y = int(self.win_h * motd_config.get("height_percent",90)/100)
-        self.ticker_container.setGeometry(0, ticker_y, self.win_w, self.ticker_label.height())
-        self.ticker_label.move(self.ticker_x,0)
+        self.ticker_container.setGeometry(x, ticker_y, w, self.ticker_label.fontMetrics().height())
+
+        # prepare repeated text with spaces for seamless loop
+        repeat_text = self.ticker_label.text() + "     "
+        self.ticker_label.setText(repeat_text * 20)  # repeat enough times
+        self.ticker_label.adjustSize()
+
+        # initial position: start at the right edge of container
+        self.ticker_x = w
+        self.ticker_label.move(self.ticker_x, 0)
+
+        self.ticker_speed = motd_config.get("speed",3)
         self.ticker_timer = QTimer()
-        self.ticker_timer.timeout.connect(self.scroll_label)
+        def scroll_label():
+            self.ticker_x -= self.ticker_speed
+            if self.ticker_x < -self.ticker_label.width()//2:
+                self.ticker_x = w  # reset to start at container right edge
+            self.ticker_label.move(self.ticker_x, 0)
+
+        self.ticker_timer.timeout.connect(scroll_label)
         self.ticker_timer.start(30)
 
         # Slide areas
@@ -203,27 +221,21 @@ class MainWindow(QWidget):
             for child in area.children():
                 child.deleteLater()
 
-        # Add static slide title
-        slide_title = slide.get("title","")
+        # static slide title
+        slide_title = slide.get("title")
         title_area = slide.get("title_area","left")
-        title_style = slide.get("title_style",{})
+        title_style = slide.get("title_style", {})
         if slide_title:
-            font_name = title_style.get("font","Arial")
-            font_size = title_style.get("size",48)
-            color = title_style.get("color","#FFFFFF")
-            align = title_style.get("alignment","center").lower()
-            label = QLabel(slide_title, self.left_area if title_area=="left" else self.right_area)
-            label.setFont(QFont(font_name,font_size))
-            label.setStyleSheet(f"color:{color}; background: transparent;")
-            label.setGeometry(0,0,(self.left_area.width() if title_area=="left" else self.right_area.width()), font_size+10)
-            align_flag = Qt.AlignmentFlag.AlignCenter
-            if align=="left": align_flag=Qt.AlignmentFlag.AlignLeft
-            if align=="right": align_flag=Qt.AlignmentFlag.AlignRight
-            label.setAlignment(align_flag)
-            label.show()
+            lbl = QLabel(slide_title, self.left_area if title_area=="left" else self.right_area)
+            lbl.setFont(QFont(title_style.get("font","Arial"), title_style.get("size",40)))
+            lbl.setStyleSheet(f"color:{title_style.get('color','#FFFFFF')}; background: transparent;")
+            lbl.adjustSize()
+            lbl.move((self.left_area.width() - lbl.width())//2 if title_area=="left" else (self.right_area.width()-lbl.width())//2, 0)
+            lbl.show()
 
         self.setup_side(self.left_area, slide.get("left"), side="left")
         self.setup_side(self.right_area, slide.get("right"), side="right")
+
         duration = slide.get("duration",10)*1000
         self.slide_timer.start(duration)
 
@@ -235,9 +247,9 @@ class MainWindow(QWidget):
 
         if ctype=="text" and source:
             label = QLabel(source, area)
-            label.setWordWrap(True)
             label.setFont(QFont(conf.get("font","Arial"), conf.get("size",40)))
             label.setStyleSheet(f"color:{conf.get('color','#FFFFFF')}; background: transparent;")
+            label.setWordWrap(True)
             label.adjustSize()
             label.move(0, area.height())
             label.show()
@@ -283,12 +295,13 @@ class MainWindow(QWidget):
     def scroll_label(self):
         if self.ticker_label:
             self.ticker_x -= self.ticker_speed
-            if self.ticker_x < -self.ticker_label.width():
-                self.ticker_x = self.ticker_container.width()
+            if self.ticker_x < -self.ticker_label.width()//2:
+                self.ticker_x = 0
             self.ticker_label.move(self.ticker_x,0)
 
 def main():
     app = QApplication(sys.argv)
+
     config = get_config_from_server()
     if config:
         new_hash = hash_config(config)
@@ -310,9 +323,8 @@ def main():
     slides_config = {"slides": config.get("slides",[])}
     settings = config
     motd_config = config.get("motd", {})
-    top_label_config = config.get("top_label", None)
 
-    window = MainWindow(slides_config, settings, motd_config, top_label_config=top_label_config)
+    window = MainWindow(slides_config, settings, motd_config)
     window.show()
     sys.exit(app.exec())
 
