@@ -1,7 +1,17 @@
 display_name: "Test Display"
+
 logo: "static/logo.png"
 hide_logo: true
 background_image: "static/media/dark.jpg"
+
+top_label:
+  text: "Test Client Display"
+  font: "Arial"
+  size: 60
+  color: "#FFFFFF"
+  horizontal_from_percent: 5
+  horizontal_to_percent: 30
+  alignment: "left"
 
 motd:
   text: "Welcome, Test Client!"
