@@ -1,5 +1,7 @@
 display_name: "Test Display"
 logo: "static/logo.png"
+background_image: "static/meida/dark.jpg"
+
 motd:
   text: "Welcome, Test Client!"
   font: "Arial"
@@ -39,7 +41,7 @@ slides:
     duration: 10
     left:
       type: image
-      source: "static/logo.png"
+      source: "static/media/logo.png"
     right:
       type: text
       source: "This is the second slide with more information."
@@ -57,7 +59,7 @@ slides:
     duration: 15
     left:
       type: video
-      source: "static/sample_video.mp4"
+      source: "static/media/serotonin.mp4"
     right:
       type: text
       source: "Enjoy the video presentation!"
